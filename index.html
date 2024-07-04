@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>解析輸入內容</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        .highlight {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>解析輸入內容</h1>
+    <textarea id="input" rows="10" cols="50"></textarea><br><br>
+    <button onclick="parseInput()">解析</button>
+    <h2>結果</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Time1 (Request timed out)</th>
+                <th>Time2 (Reply from)</th>
+                <th>Time3 (秒)</th>
+            </tr>
+        </thead>
+        <tbody id="output"></tbody>
+    </table>
+
+    <script>
+        function parseInput() {
+            const input = document.getElementById("input").value;
+            const lines = input.split('\n');
+            const outputLines = [];
+            let time1 = null;
+            let time2 = null;
+
+            for (const line of lines) {
+                const timeString = line.substring(0, 24).trim();
+                const timestamp = new Date(timeString);
+
+                if (!time1 && line.includes("Request timed out.")) {
+                    time1 = timestamp;
+                } else if (time1 && line.includes("Reply from")) {
+                    time2 = timestamp;
+                    const time3 = (time2 - time1) / 1000; // Calculate the difference in seconds
+                    const rowClass = time3 > 1 ? 'highlight' : '';
+                    outputLines.push(`<tr class="${rowClass}"><td>${time1.toTimeString().split(' ')[0]}</td><td>${time2.toTimeString().split(' ')[0]}</td><td>${time3}</td></tr>`);
+                    time1 = null;
+                }
+            }
+
+            document.getElementById("output").innerHTML = outputLines.join('');
+        }
+    </script>
+</body>
+</html>

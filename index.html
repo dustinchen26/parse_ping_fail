@@ -46,8 +46,9 @@
                 } else if (time1 && line.includes("Reply from")) {
                     time2 = timestamp;
                     const time3 = (time2 - time1) / 1000; // Calculate the difference in seconds
-                    const rowClass = time3 > 1 ? 'highlight' : '';
-                    outputLines.push(`<tr class="${rowClass}"><td>${time1.toTimeString().split(' ')[0]}</td><td>${time2.toTimeString().split(' ')[0]}</td><td>${time3}</td></tr>`);
+                    if (time3 > 1) {
+                        outputLines.push(`<tr class="highlight"><td>${time1.toTimeString().split(' ')[0]}</td><td>${time2.toTimeString().split(' ')[0]}</td><td>${time3}</td></tr>`);
+                    }
                     time1 = null;
                 }
             }

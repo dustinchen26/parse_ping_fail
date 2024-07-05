@@ -1,21 +1,46 @@
+<!-- 
+  Copyright © [2023] [Dustin_Chen]. All rights reserved.
+  Author: Dustin_Chen
+  Email:  Dustin_Chen@compal.com or chuhpsdustin@gmail.com
+
+-->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>解析輸入內容</title>
+    <title>parse_ping_fail</title>
     <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            padding: 5px;
-        }
-        .highlight {
-            color: red;
-        }
+    body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.2;
+      font-size: 14px;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+    }
+    .highlight {
+        color: red;
+    }
+
+    /* 增大输入框的CSS */
+    #input {
+        width: 55%;
+        height: 120px; 
+    }
     </style>
 </head>
 <body>
-    <h1>解析輸入內容</h1>
-    <textarea id="input" rows="10" cols="50"></textarea><br><br>
+    <h2>parse_ping_fail</h2>
+
+    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com"
+        style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
+        style="line-height: 1;">chuhpsdustin@gmail.com</a></p>    
+
+    <p>EX: paste the result of: ping 10.205.164.5 -t | while read pong; do echo "$(date): $pong"; done</p>
+
+    <textarea id="input"></textarea><br><br>
     <button onclick="parseInput()">解析</button>
     <h2>結果</h2>
     <table>

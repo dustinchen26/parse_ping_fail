@@ -2,67 +2,85 @@
   Copyright © [2023] [Dustin_Chen]. All rights reserved.
   Author: Dustin_Chen
   Email:  Dustin_Chen@compal.com or chuhpsdustin@gmail.com
-
 -->
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>parse_ping_fail</title>
     <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      line-height: 1.2;
-      font-size: 14px;
-    }
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.2;
+            font-size: 14px;
+        }
 
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-        padding: 5px;
-    }
-    .highlight {
-        color: red;
-    }
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
 
-    /* 增大输入框的CSS */
-    #input {
-        width: 55%;
-        height: 120px; 
-    }
+        .highlight {
+            color: red;
+        }
 
-    /* 表格样式 */
-    thead tr {
-        background-color: #d3d3d3; /* 灰色网底 */
-    }
+        /* 增大输入框的CSS */
+        #input {
+            width: 55%;
+            height: 120px;
+        }
 
-    tbody tr {
-        background-color: #ffffff; /* 白色网底 */
-    }
+        /* 表格样式 */
+        thead tr {
+            background-color: #d3d3d3;
+            /* 灰色网底 */
+        }
+
+        tbody tr {
+            background-color: #ffffff;
+            /* 白色网底 */
+        }
     </style>
 </head>
+
 <body>
     <h2>parse_ping_fail</h2>
 
     <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com"
-        style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
-        style="line-height: 1;">chuhpsdustin@gmail.com</a></p>    
+            style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
+            style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
 
-    <p>EX: paste the result of: ping 10.205.164.5 -t | while read pong; do echo "$(date): $pong"; done</p>
+    <ul>
+        <li><b>How to use</b>
+            <ul>
+                <li>
+                    Paste the result of => <span style="color: red;">ping 10.205.164.5 -t | while read pong; do echo
+                        "$(date): $pong"; done</span><br>
+                    It will show the results of consecutive failed pings (request timeout > 1 second)<br><br>
+                </li>
 
-    <textarea id="input"></textarea><br><br>
-    <button onclick="parseInput()">解析</button>
-    <h2>結果</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Time1 (Request timed out)</th>
-                <th>Time2 (Reply from)</th>
-                <th>Time3 (秒)</th>
-            </tr>
-        </thead>
-        <tbody id="output"></tbody>
-    </table>
+                <textarea id="input"></textarea><br><br>
+                <button onclick="parseInput()">解析</button>
+                <h2>結果</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time1 (Request timed out)</th>
+                            <th>Time2 (Reply from)</th>
+                            <th>Ping_fail_time(秒)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="output"></tbody>
+                </table>
+
+            </ul>
+        </li>
+    </ul>
+
 
     <script>
         function parseInput() {
@@ -82,7 +100,11 @@
                     time2 = timestamp;
                     const time3 = (time2 - time1) / 1000; // Calculate the difference in seconds
                     if (time3 > 1) {
-                        outputLines.push(`<tr class="highlight"><td>${time1.toTimeString().split(' ')[0]}</td><td>${time2.toTimeString().split(' ')[0]}</td><td>${time3}</td></tr>`);
+                        const formattedTime1 = formatTime(time1);
+                        const formattedTime2 = formatTime(time2);
+                        outputLines.push(
+                            `<tr class="highlight"><td>${formattedTime1}</td><td>${formattedTime2}</td><td>${Math.round(time3)}</td></tr>`
+                            );
                     }
                     time1 = null;
                 }
@@ -90,6 +112,18 @@
 
             document.getElementById("output").innerHTML = outputLines.join('');
         }
+
+        function formatTime(date) {
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const month = months[date.getMonth()];
+            const day = date.getDate().toString().padStart(2, '0'); // Ensure two digits for day
+            const hours = date.getHours().toString().padStart(2, '0'); // Ensure two digits for hours
+            const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two digits for minutes
+            const seconds = date.getSeconds().toString().padStart(2, '0'); // Ensure two digits for seconds
+
+            return `${month} ${day} ${hours}:${minutes}:${seconds}`;
+        }
     </script>
 </body>
+
 </html>
